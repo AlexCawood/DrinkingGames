@@ -147,10 +147,10 @@ class Game extends React.Component{
 
   }
   handleNextClick(){
-    if(this.state.count < this.state.games.length){
-      return 1;
-    }else {
-      return 0;
+    let count = this.state.count;
+    let games =this.state.games;
+    if( count > games.length){
+      this.setState({count:0});
     }
   }
   render(){
@@ -167,20 +167,31 @@ class Game extends React.Component{
     }else{
       comp=(<h3>Home Page</h3>);
     }
+    console.log(count);
+    console.log(current);
+    console.log(gameArrLength);
     //need to figue out why its not minusing from count!
     return (
       <div className="col-8">
         {comp}
         <div className="row">
           <div className="col-6">
-            <BackBtn onClick={()=>this.setState({count:this.state.count -(parseInt(handleChange(count, gameArrLength))),
-              current:this.state.games[this.state.count]
-              })}/>
+            <BackBtn onClick={()=>
+              {this.setState({count:this.state.count -1,
+              current:this.state.games[this.state.count]});
+              if( this.state.count < 0){
+                this.setState({count:0});
+              }
+
+            }}/>
           </div>
           <div className="col-6">
-            <NextBtn onClick={()=>this.setState({count:this.state.count + parseInt(handleChange(count, gameArrLength)),
-              current:this.state.games[this.state.count]
-              })}/>
+            <NextBtn onClick={()=>{this.setState({count:this.state.count + 1,
+              current:this.state.games[this.state.count]});
+              if( this.state.count > this.state.games.length){
+                this.setState({count:0});
+              }
+          }}/>
           </div>
         </div>
       </div>
@@ -188,7 +199,7 @@ class Game extends React.Component{
   }
 }
 function handleChange(a,b){
-  if (a<b-1 && a>=0){
+  if (a<b && a>=0){
     return 1;
   }
   else {
